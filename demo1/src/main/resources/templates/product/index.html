@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="/layout/layout :: head">
+    <title>List Product</title>
+</head>
+<body>
+<h2>Product</h2>
+<div class="notify">
+    <div th:if="${success}">
+        <span th:text="${success}"></span>
+    </div>
+</div>
+
+<div>
+    <a th:href="@{/products/create}">
+        Thêm mới sản phẩm
+    </a>
+</div>
+
+<form th:action="@{/products/search}" method="get">
+    <input type="text" name="keyword" placeholder="Tìm kiếm ...." th:value="${keyword}">
+    <button>Tìm kiếm</button>
+</form>
+<table id="products">
+    <thead>
+    <tr>
+
+        <th>STT</th>
+        <th>Tên sản phẩm</th>
+        <th>Mô tả</th>
+        <th>Nhà sản xuất</th>
+        <th>Giá</th>
+        <th>Chỉnh sửa</th>
+        <th>Xóa</th>
+        <th>Chi tiết</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="row, rowStat :${products}">
+        <td th:text="${rowStat.count}"></td>
+        <td th:text="${row.name}"></td>
+        <td th:text="${row.description}"></td>
+        <td th:text="${row.manufacture}"></td>
+        <td th:text="${row.price}"></td>
+        <td><a th:href="@{/products/{id}/edit(id=${row.getId})}">Chỉnh sửa</a></td>
+        <td><a th:href="@{/products/{id}/delete(id=${row.getId})}"
+        onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a></td>
+        <td><a th:href="@{/products/{id}/view(id=${row.getId})}">Chi tiết</a></td>
+    </tr>
+    </tbody>
+</table>
+<footer th:replace="/layout/layout :: footer"></footer>
+</body>
+</html>

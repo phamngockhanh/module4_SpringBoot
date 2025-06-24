@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a th:href="@{/blogs/create}">
+    Viết 1 blog mới
+</a>
+
+<table style="border: 1px">
+    <tr>
+        <th>STT</th>
+        <th>Tiêu đề</th>
+        <th>Nội dung</th>
+        <th>Ngày phát hành</th>
+        <th>Ngày chỉnh sửa</th>
+        <th>Tác giả</th>
+        <th>Thể loại</th>
+        <th>Chỉnh sửa</th>
+        <th>Xóa</th>
+    </tr>
+    <tr th:each="item,itemStatus : ${blogs}">
+        <td th:text="${itemStatus.count}"></td>
+        <td th:text="${item.title}"></td>
+        <td th:text="${item.content}"></td>
+        <td th:text="${item.publishedDate}"></td>
+        <td th:text="${item.updatedDate}"></td>
+        <td th:text="${item.writer.name}"></td>
+        <td th:text="${item.category.name}"></td>
+        <td><a th:href="@{/blogs/{id}/update(id=${item.getId()})}">Cập nhật</a></td>
+        <td><a th:href="@{/blogs/{id}/delete(id=${item.getId()})}">Xóa</a></td>
+        <td><a th:href="@{/blogs/{id}/view(id=${item.getId()})}">Xem chi tiết</a></td>
+    </tr>
+</table>
+</body>
+</html>
