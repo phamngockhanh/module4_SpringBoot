@@ -64,10 +64,10 @@
 </table>
 <div th:if="${blogs.totalPages!=0}">
     <a th:if="${blogs.hasPrevious()}"
-       th:href="@{/blogs(page=${blogs.number -1},title=${title},categoryId=${categoryId},size=${size})}">Trước</a>
+       th:href="@{/blogs(page=${blogs.number -1},title=${title},categoryId=${categoryId},size=${size},sortedDate=${sortedDate})}">Trước</a>
     <span th:text="${blogs.number + 1}"></span>/<span th:text="${blogs.totalPages}"></span>
     <a th:if="${blogs.hasNext()}"
-       th:href="@{/blogs(page=${blogs.number + 1},title=${title},categoryId=${categoryId},size=${size})}">Sau</a>
+       th:href="@{/blogs(page=${blogs.number + 1},title=${title},categoryId=${categoryId},size=${size},sortedDate=${sortedDate})}">Sau</a>
 </div>
 <form th:action="@{/blogs}" method="get">
     <input type="hidden" th:value="${title}" name="title">
