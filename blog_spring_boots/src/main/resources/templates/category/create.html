@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>Tạo mới thể loại</h3>
+<form action="/categories/create" method="post" th:object="${category}">
+  <input type="hidden" th:field="*{id}">
+  <div>
+    <label for="name">Tên thể loại</label>
+    <input type="text" id="name" th:field="*{name}">
+  </div>
+  <button>Tạo mới</button>
+</form>
+</body>
+</html>

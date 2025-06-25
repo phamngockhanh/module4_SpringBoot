@@ -2,6 +2,8 @@ package com.kainmvc.blog_spring_boots.service;
 
 import com.kainmvc.blog_spring_boots.entity.Blog;
 import com.kainmvc.blog_spring_boots.repository.IBlogRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,5 +40,20 @@ public class BlogService implements IBlogService{
     @Override
     public Blog detail(Integer id) {
         return blogRepo.findById(id).orElse(null);
+    }
+
+    @Override
+    public Page<Blog> findAll(Pageable pageable) {
+        return blogRepo.findAll(pageable);
+    }
+
+    @Override
+    public Page<Blog> search(String title, Pageable pageable) {
+        return blogRepo.findByTitleContaining(title,pageable);
+    }
+
+    @Override
+    public Page<Blog> search(String title, int categoryId, Pageable pageable) {
+        return blogRepo.searchByTitleAndCategory(title,categoryId,pageable);
     }
 }

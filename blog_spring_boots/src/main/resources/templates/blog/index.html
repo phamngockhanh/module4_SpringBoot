@@ -8,8 +8,32 @@
 <a th:href="@{/blogs/create}">
     Viết 1 blog mới
 </a>
-
-<table style="border: 1px">
+<a th:href="@{/categories/create}">
+    Thêm thể loại mới
+</a>
+<form th:action="@{/blogs}" method="get">
+    <input type="text" th:value="${title}" name="title">
+    <label>
+        Chọn thể loại
+        <select name="categoryId">
+            <option value="0">----Chọn thể loại----</option>
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"
+                    th:selected="${category.id==categoryId}"></option>
+        </select>
+    </label>
+    <input type="hidden" th:value="${size}" name="size">
+    <label>
+        Giảm dần
+        <input type="radio" name="sortedDate" value="false" th:checked="${sortedDate==false}">
+    </label>
+    <label>
+        Tăng dần
+        <input type="radio" name="sortedDate" value="true" th:checked="${sortedDate==true}">
+    </label>
+    <button>Tìm kiếm</button>
+</form>
+<table border="1">
+    <thead>
     <tr>
         <th>STT</th>
         <th>Tiêu đề</th>
@@ -20,7 +44,10 @@
         <th>Thể loại</th>
         <th>Chỉnh sửa</th>
         <th>Xóa</th>
+        <th>Xem chi tiết</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="item,itemStatus : ${blogs}">
         <td th:text="${itemStatus.count}"></td>
         <td th:text="${item.title}"></td>
@@ -33,6 +60,26 @@
         <td><a th:href="@{/blogs/{id}/delete(id=${item.getId()})}">Xóa</a></td>
         <td><a th:href="@{/blogs/{id}/view(id=${item.getId()})}">Xem chi tiết</a></td>
     </tr>
+    </tbody>
 </table>
+<div th:if="${blogs.totalPages!=0}">
+    <a th:if="${blogs.hasPrevious()}"
+       th:href="@{/blogs(page=${blogs.number -1},title=${title},categoryId=${categoryId},size=${size})}">Trước</a>
+    <span th:text="${blogs.number + 1}"></span>/<span th:text="${blogs.totalPages}"></span>
+    <a th:if="${blogs.hasNext()}"
+       th:href="@{/blogs(page=${blogs.number + 1},title=${title},categoryId=${categoryId},size=${size})}">Sau</a>
+</div>
+<form th:action="@{/blogs}" method="get">
+    <input type="hidden" th:value="${title}" name="title">
+    <input type="hidden" th:value="${sortedDate}" name="sortedDate">
+    <input type="hidden" th:value="${categoryId}" name="categoryId">
+    <label>
+        <select name="size" onchange="this.form.submit()">
+            <option th:each="item : ${sizeList}" th:value="${item}" th:text="${item}"
+                    th:selected="${item == size}"></option>
+        </select>
+    </label>
+</form>
+<span th:if="${blogs.totalPages==0}">Không tìm thấy dữ liệu</span>
 </body>
 </html>
