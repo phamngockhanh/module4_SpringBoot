@@ -31,13 +31,13 @@
     <div>
         <label>Thể loại</label>
         <select th:field="*{category}">
-            <option th:each="category,categories : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
         </select>
     </div>
     <div>
         <label>Tác giả</label>
         <select th:field="*{writer}">
-            <option th:each="writer,writers :${writers}" th:value="${writer.id}" th:text="${writer.name}"></option>
+            <option th:each="writer :${writers}" th:value="${writer.id}" th:text="${writer.name}"></option>
         </select>
     </div>
     <button value="update">Cập nhật</button>
