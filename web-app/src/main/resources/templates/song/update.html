@@ -5,19 +5,23 @@
     <title>Title</title>
 </head>
 <body>
-<form th:action="@{/songs/add}" th:object="${songRequestDto}" method="post">
+<form th:action="@{/songs/update}" th:object="${songRequestDto}" method="post">
     <fieldset>
         <legend>Thêm mới bài hát</legend>
-        <label>Tên bài hát</label>
+        <input type="hidden"  th:field="*{id}">
+        <label>Tên bài hát
         <input type="text"  th:field="*{songName}">
+        </label>
         <small style="color:red" th:if="${#fields.hasErrors('songName')}" th:errors="*{songName}"></small><br>
-        <label>Thể loại</label>
+        <label>Thể loại
         <input type="text" th:field="*{singer}">
         <small style="color:red" th:if="${#fields.hasErrors('singer')}" th:errors="*{singer}"></small><br>
-        <label>Ca sĩ</label>
+        </label>
+        <label>Ca sĩ
         <input type="text" th:field="*{category}">
         <small style="color:red" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></small><br>
-        <button>Thêm mới</button>
+        </label>
+        <button>Cập nhật</button>
     </fieldset>
 </form>
 </body>

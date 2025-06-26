@@ -8,4 +8,5 @@ public interface ISongService {
     List<Song> findAll();
     void add(Song song);
     void update(Song song);
+    Song findById(Long id );
 }

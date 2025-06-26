@@ -13,6 +13,7 @@ import org.springframework.validation.Validator;
 @NoArgsConstructor
 
 public class SongRequestDto implements Validator {
+    private Long id;
     private String songName;
     private String category;
     private String singer;
@@ -29,7 +30,7 @@ public class SongRequestDto implements Validator {
             errors.rejectValue("songName","Empty","Không được để trống");
         } else if (!songRequestDto.getSongName().matches("^.{1,800}$")) {
             errors.rejectValue("songName","MoreThan800","Không được quá 800 ký tự");
-        }else if(!songRequestDto.getSongName().matches("^[a-zA-Z0-9 ]+$")){
+        }else if(songRequestDto.getSongName().matches("^[!\"#$%&'()*+,-./:;<=>?@\\[\\]^_`{|}~\\\\]+$")){
             errors.rejectValue("songName","SpecialKeyword","Không được chứa ký tự đặc biệt");
         }
 
@@ -37,7 +38,7 @@ public class SongRequestDto implements Validator {
             errors.rejectValue("singer","Empty","Không được để trống");
         } else if (!songRequestDto.getSinger().matches("^.{1,300}$")) {
             errors.rejectValue("singer","MoreThan300","Không được quá 800 ký tự");
-        }else if(!songRequestDto.getSinger().matches("^[a-zA-Z0-9 ]+$")){
+        }else if(songRequestDto.getSinger().matches("^[!\"#$%&'()*+,-./:;<=>?@\\[\\]^_`{|}~\\\\]+$")){
             errors.rejectValue("singer","SpecialKeyword","Không được chứa ký tự đặc biệt");
         }
 
@@ -45,7 +46,7 @@ public class SongRequestDto implements Validator {
             errors.rejectValue("category","Empty","Không được để trống");
         } else if (!songRequestDto.getCategory().matches("^.{1,1000}$")) {
             errors.rejectValue("category","MoreThan1000","Không được quá 800 ký tự");
-        }else if(!songRequestDto.getCategory().matches("^[a-zA-Z0-9 ]+$")){
+        }else if(songRequestDto.getCategory().matches("^[!\"#$%&'()*+,-./:;<=>?@\\[\\]^_`{|}~\\\\]+$")){
             errors.rejectValue("category","SpecialKeyword","Không được chứa ký tự đặc biệt");
         }
     }

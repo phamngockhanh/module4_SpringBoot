@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -46,5 +43,25 @@ public class SongController {
         redirectAttributes.addFlashAttribute("mess","thêm mới thành công");
         iSongService.add(song);
         return "redirect:/songs";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String edit(@PathVariable Long id, Model model){
+        model.addAttribute("songRequestDto",iSongService.findById(id));
+        return "/song/update";
+    }
+
+    @PostMapping("/update")
+    public String update(@Validated @ModelAttribute SongRequestDto songRequestDto, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        Song song = new Song();
+        new SongRequestDto().validate(songRequestDto,bindingResult);
+        if(bindingResult.hasErrors()){
+            return "/song/update";
+        }
+        BeanUtils.copyProperties(songRequestDto,song);
+        redirectAttributes.addFlashAttribute("mess", "cập nhật thành công");
+        iSongService.update(song);
+        return "redirect:/songs";
+
     }
 }
