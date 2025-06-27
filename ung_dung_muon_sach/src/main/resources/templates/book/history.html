@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>Lịch sử đặt sách</h3>
+<a href="/books">Quay lại trang đặt sách</a>
+<table border = 1px>
+    <tr>
+        <th>STT</th>
+        <th>Ngày mượn</th>
+        <th>Ngày trả</th>
+        <th>Mã mượn sách</th>
+        <th>Trạng thái</th>
+    </tr>
+    <tr th:each="receipt, receiptStatus : ${receipts}">
+        <td th:text="${receiptStatus.count}"></td>
+        <td th:text="${receipt.borrowDate}"></td>
+        <td th:text="${receipt.returnDate != null ? receipt.returnDate : '---'}"></td>
+        <td th:text="${receipt.code}"></td>
+        <td>
+            <span th:if="${receipt.returnDate != null}">Đã trả sách</span>
+            <a th:if="${receipt.returnDate == null}"
+               th:href="@{/books/history/{id}/return(id=${receipt.id})}">
+                Trả sách
+            </a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

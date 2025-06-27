@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<form th:action="@{/books/history/return}" th:object="${receipt}" method="post">
+  <input type="hidden" th:field="*{id}">
+  <div>
+    <label>Ngày mượn:</label>
+    <label th:text="${receipt.borrowDate}"></label>
+  </div>
+  <div>
+    <label>Ngày trả:</label>
+    <label th:text="${receipt.returnDate != null ? receipt.returnDate : 'Hiện chưa trả sách'}"></label>
+  </div>
+  <div>
+    <label>Mã sách:</label>
+    <input type="text" name="code" >
+  </div>
+  <small style="color: red" th:text="${mess}"></small>
+  <button>Trả sách</button>
+</form>
+</html>
