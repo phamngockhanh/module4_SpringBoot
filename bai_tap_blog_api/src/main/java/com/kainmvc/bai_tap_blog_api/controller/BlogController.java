@@ -41,9 +41,11 @@ public class BlogController {
 
     @GetMapping
     public  ResponseEntity<List<Blog>> findAll(  @RequestParam(required = false, defaultValue = "2") int size,
-                                                 @RequestParam(required = false, defaultValue = "0") int page){
+                                                 @RequestParam(required = false, defaultValue = "0") int page,
+                                                 @RequestParam(required = false, defaultValue = "") String searchName,
+                                                 @RequestParam(required = false, defaultValue = "0") Integer categoryId){
         Pageable pageable = PageRequest.of(page,size);
-        Page<Blog> blogList = iBlogService.findAll(pageable);
+        Page<Blog> blogList = iBlogService.search(searchName,categoryId,pageable);
         if(blogList.getContent().isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

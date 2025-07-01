@@ -59,6 +59,11 @@ public class BlogService implements IBlogService{
     }
 
     @Override
+    public Page<Blog> search(Integer categoryId, Pageable pageable) {
+        return blogRepo.searchByCategory(categoryId,pageable);
+    }
+
+    @Override
     public List<Blog> findByCategoryId(Category category) {
         return blogRepo.findBlogByCategory(category);
     }
