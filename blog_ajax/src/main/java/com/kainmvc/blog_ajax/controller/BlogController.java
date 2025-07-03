@@ -7,6 +7,9 @@ import com.kainmvc.blog_ajax.entity.Writer;
 import com.kainmvc.blog_ajax.service.IBlogService;
 import com.kainmvc.blog_ajax.service.ICategoryService;
 import com.kainmvc.blog_ajax.service.IWriterService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,12 +32,24 @@ public class BlogController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Blog>> findAll(){
-        List<Blog> blogList = (List<Blog>) iBlogService.findAll();
-        if(blogList.isEmpty()){
+    public ResponseEntity<Page<Blog>> findAll( @RequestParam(required = false, defaultValue = "2") int size,
+                                               @RequestParam(required = false, defaultValue = "0") int page,
+                                               @RequestParam(required = false, defaultValue = "") String title,
+                                               @RequestParam(required = false, defaultValue = "0") Integer categoryId){
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Blog> blogs = iBlogService.search(title,categoryId,pageable);
+        if(blogs.getContent().isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(blogList,HttpStatus.OK);
+        return new ResponseEntity<>(blogs,HttpStatus.OK);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Blog>> findById(@PathVariable Long id){
+        Optional<Blog> blogOptional = iBlogService.findById(id);
+        if(blogOptional.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(blogOptional,HttpStatus.OK);
     }
 
     @PostMapping
@@ -58,7 +73,7 @@ public class BlogController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         blog.setId(blogOptional.get().getId());
-        return new ResponseEntity<>(blogOptional.get(),HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(iBlogService.save(blog),HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")

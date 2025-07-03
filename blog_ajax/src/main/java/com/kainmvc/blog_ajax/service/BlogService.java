@@ -2,10 +2,10 @@ package com.kainmvc.blog_ajax.service;
 
 import com.kainmvc.blog_ajax.entity.Blog;
 import com.kainmvc.blog_ajax.repository.IBlogRepository;
-import lombok.Setter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
 import java.util.Optional;
 @Service
 public class BlogService implements IBlogService{
@@ -33,5 +33,10 @@ public class BlogService implements IBlogService{
     @Override
     public void delete(Long id) {
         iBlogRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Blog> search(String title, int categoryId, Pageable pageable) {
+        return iBlogRepository.searchByTitleAndCategory(title,categoryId,pageable);
     }
 }
