@@ -1,0 +1,73 @@
+package com.kainmvc.blog_ajax.controller;
+
+
+import com.kainmvc.blog_ajax.entity.Blog;
+import com.kainmvc.blog_ajax.entity.Category;
+import com.kainmvc.blog_ajax.entity.Writer;
+import com.kainmvc.blog_ajax.service.IBlogService;
+import com.kainmvc.blog_ajax.service.ICategoryService;
+import com.kainmvc.blog_ajax.service.IWriterService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@CrossOrigin("*")
+@RestController
+@RequestMapping("/api/blogs")
+public class BlogController {
+    private final IBlogService iBlogService;
+    private final ICategoryService iCategoryService;
+    private final IWriterService iWriterService;
+
+    public BlogController(IBlogService iBlogService, ICategoryService iCategoryService, IWriterService iWriterService) {
+        this.iBlogService = iBlogService;
+        this.iCategoryService = iCategoryService;
+        this.iWriterService = iWriterService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Blog>> findAll(){
+        List<Blog> blogList = (List<Blog>) iBlogService.findAll();
+        if(blogList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(blogList,HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Blog> save(@RequestBody Blog blog){
+        Long categoryId = blog.getCategory().getId();
+        Long writerId = blog.getWriter().getId();
+        Category category = iCategoryService.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        Writer writer = iWriterService.findById(writerId)
+                .orElseThrow(() -> new RuntimeException("Writer not found"));
+
+        blog.setCategory(category);
+        blog.setWriter(writer);
+        return new ResponseEntity<>(iBlogService.save(blog),HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Blog> update(@PathVariable Long id, @RequestBody Blog blog){
+        Optional<Blog> blogOptional = iBlogService.findById(id);
+        if(blogOptional.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        blog.setId(blogOptional.get().getId());
+        return new ResponseEntity<>(blogOptional.get(),HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Blog> delete(@PathVariable Long id){
+        Optional<Blog> blogOptional = iBlogService.findById(id);
+        if (blogOptional.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        iBlogService.delete(id);
+        return new ResponseEntity<>(blogOptional.get(),HttpStatus.NO_CONTENT);
+    }
+}

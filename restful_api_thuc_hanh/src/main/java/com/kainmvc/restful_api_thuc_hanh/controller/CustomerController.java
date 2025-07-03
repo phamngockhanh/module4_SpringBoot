@@ -1,12 +1,12 @@
-package controller;
+package com.kainmvc.restful_api_thuc_hanh.controller;
 
 
-import model.Customer;
+import com.kainmvc.restful_api_thuc_hanh.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.ICustomerService;
+import com.kainmvc.restful_api_thuc_hanh.service.ICustomerService;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,5 +49,15 @@ public class CustomerController {
         }
         customer.setId(customerOptional.get().getId());
         return new ResponseEntity<>(iCustomerService.save(customer),HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Customer> deleteCustomer(@PathVariable Long id) {
+        Optional<Customer> customerOptional = iCustomerService.findById(id);
+        if (customerOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        iCustomerService.remove(id);
+        return new ResponseEntity<>(customerOptional.get(), HttpStatus.OK);
     }
 }

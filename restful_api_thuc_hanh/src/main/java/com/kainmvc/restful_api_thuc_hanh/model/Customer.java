@@ -1,4 +1,4 @@
-package model;
+package com.kainmvc.restful_api_thuc_hanh.model;
 
 
 
