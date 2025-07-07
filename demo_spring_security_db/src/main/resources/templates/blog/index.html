@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{page.title}">Blog Page</title>
+</head>
+<body>
+<a th:href="@{/blogs/create}" th:text="#{link.createBlog}">Viết 1 blog mới</a>
+<a th:href="@{/categories/create}" th:text="#{link.createCategory}">Thêm thể loại mới</a>
+<a href="/blogs?lang=vi" > <img src="https://flagcdn.com/24x18/vn.png" alt="Vietnam">Việt Nam</a>
+<a href="/blogs?lang=en"> <img src="https://flagcdn.com/24x18/us.png" alt="USA">English</a>
+<a href="/blogs?lang=ko"> <img src="https://flagcdn.com/24x18/kr.png" alt="Korea">Korean</a>
+<form th:action="@{/blogs}" method="get">
+    <input type="text" th:value="${title}" name="title" th:placeholder="#{input.title}" />
+
+    <label>
+        <span th:text="#{label.selectCategory}">Chọn thể loại</span>
+        <select name="categoryId">
+            <option value="0" th:text="#{option.selectCategory}">----Chọn thể loại----</option>
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"
+                    th:selected="${category.id==categoryId}"></option>
+        </select>
+    </label>
+
+    <input type="hidden" th:value="${size}" name="size">
+
+    <label>
+        <input type="radio" name="sortedDate" value="false" th:checked="${sortedDate==false}">
+        <span th:text="#{label.descending}">Giảm dần</span>
+    </label>
+    <label>
+        <input type="radio" name="sortedDate" value="true" th:checked="${sortedDate==true}">
+        <span th:text="#{label.ascending}">Tăng dần</span>
+    </label>
+
+    <button th:text="#{button.search}">Tìm kiếm</button>
+</form>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th th:text="#{table.no}">STT</th>
+        <th th:text="#{table.title}">Tiêu đề</th>
+        <th th:text="#{table.content}">Nội dung</th>
+        <th th:text="#{table.publishedDate}">Ngày phát hành</th>
+        <th th:text="#{table.updatedDate}">Ngày chỉnh sửa</th>
+        <th th:text="#{table.author}">Tác giả</th>
+        <th th:text="#{table.category}">Thể loại</th>
+        <th th:text="#{table.edit}">Chỉnh sửa</th>
+        <th th:text="#{table.delete}">Xóa</th>
+        <th th:text="#{table.view}">Xem chi tiết</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item,itemStatus : ${blogs}">
+        <td th:text="${itemStatus.count}"></td>
+        <td th:text="${item.title}"></td>
+        <td th:text="${item.content}"></td>
+        <td th:text="${item.publishedDate}"></td>
+        <td th:text="${item.updatedDate}"></td>
+        <td th:text="${item.writer.name}"></td>
+        <td th:text="${item.category.name}"></td>
+        <td><a th:href="@{/blogs/{id}/update(id=${item.getId()})}" th:text="#{table.edit}">Cập nhật</a></td>
+        <td><a th:href="@{/blogs/{id}/delete(id=${item.getId()})}" th:text="#{table.delete}">Xóa</a></td>
+        <td><a th:href="@{/blogs/{id}/view(id=${item.getId()})}" th:text="#{table.view}">Xem chi tiết</a></td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${blogs.totalPages!=0}">
+    <a th:if="${blogs.hasPrevious()}"
+       th:href="@{/blogs(page=${blogs.number -1},title=${title},categoryId=${categoryId},size=${size},sortedDate=${sortedDate})}"
+       th:text="#{pagination.previous}">Trước</a>
+    <span th:text="${blogs.number + 1}"></span>/<span th:text="${blogs.totalPages}"></span>
+    <a th:if="${blogs.hasNext()}"
+       th:href="@{/blogs(page=${blogs.number + 1},title=${title},categoryId=${categoryId},size=${size},sortedDate=${sortedDate})}"
+       th:text="#{pagination.next}">Sau</a>
+</div>
+
+<form th:action="@{/blogs}" method="get">
+    <input type="hidden" th:value="${title}" name="title">
+    <input type="hidden" th:value="${sortedDate}" name="sortedDate">
+    <input type="hidden" th:value="${categoryId}" name="categoryId">
+    <label>
+        <select name="size" onchange="this.form.submit()">
+            <option th:each="item : ${sizeList}" th:value="${item}" th:text="${item}"
+                    th:selected="${item == size}"></option>
+        </select>
+    </label>
+</form>
+
+<span th:if="${blogs.totalPages==0}" th:text="#{message.noData}">Không tìm thấy dữ liệu</span>
+</body>
+</html>

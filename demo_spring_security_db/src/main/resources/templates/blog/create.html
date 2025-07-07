@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a th:href="@{/blogs}">
+    Quay lại trang chủ
+</a>
+<form th:action="@{/blogs/save}" th:object="${blog}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <label for="blogTitle">
+        Tiêu đề:
+        <input id="blogTitle" type="text" th:field="*{title}" required>
+    </label>
+    <br>
+    <label for="blogContent">
+        Nội dung:
+        <input id="blogContent" type="text" th:field="*{content}" required>
+    </label>
+    <br>
+    <label for="publishedDate">
+        Ngày phát hành:
+        <input id="publishedDate" type="date" th:field="*{publishedDate}"  required>
+    </label>
+    <br>
+    <label for="updatedDate">
+        Ngày cập nhật:
+        <input id="updatedDate" type="date" th:field="*{updatedDate}"  required>
+    </label>
+    <br>
+    <label>
+        Thể loại:
+        <select  th:field="*{category}">
+            <option th:each="category : ${categories}"  th:value="${category.id}" th:text="${category.name}"></option>
+        </select>
+    </label>
+    <br>
+    <label>
+        Người viết:
+        <select th:field="*{writer}">
+            <option  th:each="writer : ${writers}" th:value="${writer.id}" th:text="${writer.name}"></option>
+        </select>
+    </label>
+    <br>
+    <button value="save">Thêm mới</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>Cập nhật blog</h3>
+<a th:href="@{/blogs}">
+    Quay lại trang chủ
+</a>
+
+<form th:action="@{/blogs/update}" th:object="${blog}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <div>
+        <label for="title">Tiêu đề</label>
+        <input type="text" id="title" th:field="*{title}">
+    </div>
+    <div>
+        <label for="content">Nội dung</label>
+        <input type="text" id="content" th:field="*{content}">
+    </div>
+    <div>
+        <label for="publishedDate">Ngày phát hành</label>
+        <input type="date" id="publishedDate" th:field="*{publishedDate}">
+    </div>
+    <div>
+        <label for="updatedDate">Ngày cập nhật</label>
+        <input type="date" id="updatedDate" th:field="*{updatedDate}">
+    </div>
+    <div>
+        <label>Thể loại</label>
+        <select th:field="*{category}">
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+        </select>
+    </div>
+    <div>
+        <label>Tác giả</label>
+        <select th:field="*{writer}">
+            <option th:each="writer :${writers}" th:value="${writer.id}" th:text="${writer.name}"></option>
+        </select>
+    </div>
+    <button value="update">Cập nhật</button>
+</form>
+</body>
+</html>
