@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/blogs")
-public class BlogController {
+public class    BlogController {
     private final IBlogService iBlogService;
     private final ICategoryService iCategoryService;
     private final IWriterService iWriterService;

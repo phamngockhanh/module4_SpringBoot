@@ -5,11 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-<h3>Tạo mới thể loại</h3>
+<h3 th:text="#{label.createNewCategory}">Tạo mới thể loại</h3>
 <form action="/categories/create" method="post" th:object="${category}">
   <input type="hidden" th:field="*{id}">
   <div>
-    <label for="name">Tên thể loại</label>
+    <label for="name" th:text="#{label.categoryName}">Tên thể loại</label>
     <input type="text" id="name" th:field="*{name}">
   </div>
   <button>Tạo mới</button>
